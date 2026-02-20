@@ -13,6 +13,7 @@ export default function App() {
   const [deckId, setDeckId] = useState(null);
   const [remaining, setRemaining] = useState(52);
   const [drawn, setDrawn] = useState([]);
+  const [error, setError] = useState(null);
   const transformsRef = useRef(generateBaseTransforms(52));
 
   /** Create a new shuffled deck on mount. */
@@ -30,7 +31,12 @@ export default function App() {
 
   /** Draw one card from the deck and add it to the drawn pile. */
   const handleDraw = async () => {
-    if (!deckId || remaining === 0) return;
+    if (!deckId) return;
+    if (remaining === 0) {
+      setError("Error: no cards remaining!");
+      return;
+    }
+    setError(null);
     try {
       const res = await drawFromDeck(deckId, 1);
       setRemaining(res.remaining);
@@ -48,6 +54,7 @@ export default function App() {
       await shuffleDeck(deckId);
       setDrawn([]);
       setRemaining(52);
+      setError(null);
       transformsRef.current = generateBaseTransforms(52);
     } catch (err) {
       console.error(err);
@@ -61,6 +68,7 @@ export default function App() {
         drawnCount={drawn.length}
         onDraw={handleDraw}
         onShuffle={handleShuffle}
+        error={error}
       />
       <DrawnCards drawn={drawn} onShuffle={handleShuffle} />
       <Deck

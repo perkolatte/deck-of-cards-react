@@ -7,8 +7,9 @@ import React from "react";
  * @param {number} props.drawnCount - Number of cards already drawn.
  * @param {Function} props.onDraw - Callback for the Draw button.
  * @param {Function} props.onShuffle - Callback for the Shuffle button.
+ * @param {string|null} props.error - Error message to display, or null.
  */
-export default function Controls({ remaining, drawnCount, onDraw, onShuffle }) {
+export default function Controls({ remaining, drawnCount, onDraw, onShuffle, error }) {
   return (
     <div className="controls">
       <button
@@ -28,6 +29,11 @@ export default function Controls({ remaining, drawnCount, onDraw, onShuffle }) {
       <div className="remaining" aria-live="polite">
         Remaining: <strong>{remaining}</strong>
       </div>
+      {error && (
+        <div className="error-message" role="alert">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
