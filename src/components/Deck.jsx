@@ -19,7 +19,7 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
         return (
           <img
             key={i}
-            src="/images/back.png"
+            src={`${import.meta.env.BASE_URL}images/back.png`}
             alt="Shuffle deck, face down"
             className={`deck-card${isTop ? " top-card" : ""}`}
             data-pin-nopin="true"
