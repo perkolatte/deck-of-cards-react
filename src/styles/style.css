@@ -15,9 +15,16 @@
 .controls {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 12px;
-  gap: 8px;
+  width: 100%;
+  gap: 6px;
+}
+
+.controls button {
+  padding: 6px 10px;
+  white-space: nowrap;
+  font-size: 0.85rem;
 }
 
 .controls .remaining {
@@ -57,11 +64,21 @@ body {
   display: flex;
   align-items: center;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   width: 100%;
   height: 100dvh;
   padding: 16px;
   padding-bottom: calc(16px + env(safe-area-inset-bottom));
+  gap: 16px;
+}
+
+/* Cards area fills remaining space and centers its children */
+.cards-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  flex: 1;
+  width: 100%;
   gap: 16px;
 }
 
@@ -72,8 +89,8 @@ body {
 #deck {
   position: relative;
   align-self: center;
-  width: 168px;
-  height: 224px;
+  aspect-ratio: 5 / 7;
+  width: clamp(120px, 35vw, 240px);
 }
 
 #drawn-cards-container:hover {
@@ -91,7 +108,7 @@ body {
   left: 50%;
   display: block;
   width: auto;
-  max-width: clamp(120px, 60dvw, 300px);
+  max-width: 100%;
   height: auto;
   max-height: 100%;
   border-radius: 8px;
@@ -124,28 +141,20 @@ body {
    Orientation Overrides
 ----------------------------------- */
 @media (orientation: portrait) {
-  #game-container {
-    align-items: center !important;
+  .cards-area {
     flex-direction: column !important;
-    justify-content: space-evenly !important;
   }
 }
 
 @media (orientation: landscape) {
-  #game-container {
+  .cards-area {
     flex-direction: row !important;
-    justify-content: space-around;
   }
 
   #drawn-cards-container,
   #deck {
-    width: clamp(140px, 30dvh, 200px);
-    height: clamp(100px, 25dvh, 150px);
-  }
-
-  .card,
-  .deck-card {
-    width: 100%;
+    width: auto;
+    height: clamp(100px, 55dvh, 320px);
   }
 }
 
@@ -153,86 +162,10 @@ body {
    Responsive Layout
 ----------------------------------- */
 
-/* Small landscape */
-@media (orientation: landscape) and (max-width: 599px) {
-  #game-container {
-    padding: 12px;
-  }
-
-  #drawn-cards-container,
-  #deck {
-    width: clamp(100px, 25dvh, 160px);
-    height: clamp(120px, 20dvh, 225px);
-  }
-}
-
-/* Tablet portrait */
-@media (min-width: 600px) and (orientation: portrait) {
-  #game-container {
-    padding: 24px;
-    gap: 24px;
-  }
-
-  #drawn-cards-container,
-  #deck {
-    width: 200px;
-    height: 268px;
-  }
-}
-
-/* Tablet landscape */
-@media (min-width: 600px) and (orientation: landscape) {
-  #game-container {
-    padding: 24px;
-    gap: 24px;
-  }
-
-  #drawn-cards-container,
-  #deck {
-    width: clamp(168px, 30dvh, 200px);
-    height: clamp(100px, 25dvh, 150px);
-  }
-}
-
-/* Large desktop */
-@media (min-width: 900px) {
-  #game-container {
-    padding: 48px;
-    gap: 48px;
-  }
-
-  #drawn-cards-container,
-  #deck {
-    width: 201px;
-    height: 268px;
-  }
-}
-
-/* Large desktop landscape */
-@media (min-width: 900px) and (orientation: landscape) {
-  #game-container {
-    padding: 32px;
-    gap: 32px;
-  }
-
-  #drawn-cards-container,
-  #deck {
-    width: 240px;
-    height: 320px;
-  }
-}
-
-/* Small screens (e.g. iPhones) */
+/* Small screens */
 @media (max-width: 375px) {
   #drawn-cards-container,
   #deck {
-    width: clamp(75px, 50dvw, 150px);
-    height: clamp(100px, 50vh, 200px);
-  }
-
-  .card,
-  .deck-card {
-    max-width: 100%;
-    max-height: 100%;
+    width: clamp(90px, 40vw, 150px);
   }
 }

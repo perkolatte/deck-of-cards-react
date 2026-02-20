@@ -139,12 +139,14 @@ export default function App() {
         onSlower={handleSlower}
         error={error}
       />
-      <DrawnCards drawn={drawn} onShuffle={handleShuffle} />
-      <Deck
-        remaining={remaining}
-        transformsRef={transformsRef}
-        onDraw={handleDraw}
-      />
+      <div className="cards-area">
+        <DrawnCards drawn={drawn} onShuffle={handleShuffle} />
+        <Deck
+          remaining={remaining}
+          transformsRef={transformsRef}
+          onDraw={handleDraw}
+        />
+      </div>
     </div>
   );
 }

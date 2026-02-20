@@ -31,7 +31,7 @@ export default function Controls({
         Draw
       </button>
       <button onClick={onToggleAutoDraw} disabled={!remaining && !isDrawing}>
-        {isDrawing ? "Stop drawing" : "Start Auto Draw"}
+        {isDrawing ? "Stop" : "Auto"}
       </button>
       <button onClick={onFaster} disabled={speed <= 200}>
         Faster
