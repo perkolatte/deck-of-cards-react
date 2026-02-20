@@ -1,5 +1,5 @@
 import React from "react";
-import { randomTransform } from "../utils/transforms";
+import { nudgeDeckCard } from "../utils/transforms";
 
 export default function Deck({ remaining, transformsRef, onDraw }) {
   return (
@@ -21,30 +21,18 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
               zIndex: i + 1,
               "--base-transform": transformsRef.current[i],
             }}
-            onMouseEnter={(e) => {
-              const el = e.currentTarget;
-              const { offsetX, offsetY, rotation } = randomTransform({
+            onMouseEnter={(e) =>
+              nudgeDeckCard(e.currentTarget, i, transformsRef, {
                 maxOffset: isTop ? 10 : 5,
                 maxRotation: isTop ? 20 : 10,
-              });
-              const prevBase =
-                transformsRef.current[i] || "translate(-50%, -50%)";
-              const newBase = `${prevBase} translate(${offsetX}px, ${offsetY}px) rotate(${rotation}deg)`;
-              transformsRef.current[i] = newBase;
-              el.style.setProperty("--base-transform", newBase);
-            }}
-            onMouseLeave={(e) => {
-              const el = e.currentTarget;
-              const { offsetX, offsetY, rotation } = randomTransform({
+              })
+            }
+            onMouseLeave={(e) =>
+              nudgeDeckCard(e.currentTarget, i, transformsRef, {
                 maxOffset: isTop ? 5 : 3,
                 maxRotation: isTop ? 10 : 5,
-              });
-              const prevBase =
-                transformsRef.current[i] || "translate(-50%, -50%)";
-              const newBase = `${prevBase} translate(${offsetX}px, ${offsetY}px) rotate(${rotation}deg)`;
-              transformsRef.current[i] = newBase;
-              el.style.setProperty("--base-transform", newBase);
-            }}
+              })
+            }
           />
         );
       })}
