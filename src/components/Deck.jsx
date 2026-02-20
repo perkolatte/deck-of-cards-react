@@ -18,7 +18,12 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
       tabIndex={0}
       aria-label={`Deck: ${remaining} cards remaining. Click to draw.`}
       onClick={onDraw}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDraw(); } }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onDraw();
+        }
+      }}
     >
       {Array.from({ length: 52 }).map((_, i) => {
         const show = i < remaining;
