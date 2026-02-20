@@ -13,6 +13,7 @@ A React app that draws and shuffles playing cards using the [Deck of Cards API](
 - **Faster / Slower** — change the auto-draw speed in 200ms steps
 - **Shuffle** — return all drawn cards to the deck and reshuffle
 - **Hover effects** — drawn pile scales up and nudges cards; deck cards nudge individually
+- **Touch effects** — tap nudge radiates from the touched card with distance-based decay
 - **Responsive** — fluid card sizing with `aspect-ratio` and `clamp()` across all viewports
 - **Accessible** — keyboard navigation, semantic landmarks, ARIA labels, focus-visible outlines
 

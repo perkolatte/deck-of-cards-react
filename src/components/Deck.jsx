@@ -76,7 +76,6 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
 
   const handleTouchEnd = (e) => {
     e.preventDefault();
-    resetAll({ maxOffset: 5, maxRotation: 10 }, touchIndex(e));
     onDraw();
   };
 
