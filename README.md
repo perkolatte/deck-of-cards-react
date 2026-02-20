@@ -18,12 +18,12 @@ A React app that draws and shuffles playing cards using the [Deck of Cards API](
 
 ## Tech Stack
 
-| Tool | Version |
-|------|---------|
-| React | 18.2 |
-| Vite | 7.3 |
-| Deck of Cards API | v2 |
-| GitHub Pages | via `peaceiris/actions-gh-pages` |
+| Tool              | Version                          |
+| ----------------- | -------------------------------- |
+| React             | 18.2                             |
+| Vite              | 7.3                              |
+| Deck of Cards API | v2                               |
+| GitHub Pages      | via `peaceiris/actions-gh-pages` |
 
 ## Project Structure
 
