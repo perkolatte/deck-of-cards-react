@@ -1,7 +1,6 @@
 {
   "name": "deck-of-cards",
   "version": "1.0.0",
-  "main": "deck-of-cards.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

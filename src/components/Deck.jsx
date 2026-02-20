@@ -1,5 +1,6 @@
 import React from "react";
 import { nudgeDeckCard } from "../utils/transforms";
+import backImg from "../assets/back.png";
 
 /**
  * Visual deck of 52 face-down card images.
@@ -19,7 +20,7 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
         return (
           <img
             key={i}
-            src={`${import.meta.env.BASE_URL}images/back.png`}
+            src={backImg}
             alt="Shuffle deck, face down"
             className={`deck-card${isTop ? " top-card" : ""}`}
             data-pin-nopin="true"
