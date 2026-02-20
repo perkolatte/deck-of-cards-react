@@ -9,6 +9,20 @@
   margin: 0;
 }
 
+/* -----------------------------------
+   Controls Bar
+----------------------------------- */
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.controls .remaining {
+  margin-left: auto;
+}
+
 /* Disable page scrolling and account for safe areas on mobile */
 html,
 body {
