@@ -15,42 +15,68 @@ const canHover = window.matchMedia("(hover: hover)").matches;
  * @param {Function} props.onDraw - Callback fired when the deck is clicked/tapped.
  */
 export default function Deck({ remaining, transformsRef, onDraw }) {
-  /** Nudge all visible cards (press / hover-enter effect). */
+  /**
+   * Nudge all visible cards with distance-based attenuation.
+   * The touched card gets the full effect; cards farther away in either
+   * direction get exponentially less.
+   * @param {Object} opts - { maxOffset, maxRotation }
+   * @param {number} origin - Index of the card that was touched.
+   */
   const nudgeAll = useCallback(
-    (opts) => {
+    (opts, origin) => {
       const el = document.getElementById("deck");
       if (!el) return;
       el.querySelectorAll(".deck-card").forEach((img, i) => {
         if (img.style.display !== "none") {
-          nudgeDeckCard(img, i, transformsRef, opts);
+          const dist = Math.abs(origin - i);
+          const factor = Math.pow(0.4, dist); // 1, 0.4, 0.16, …
+          nudgeDeckCard(img, i, transformsRef, {
+            maxOffset: opts.maxOffset * factor,
+            maxRotation: opts.maxRotation * factor,
+          });
         }
       });
     },
     [transformsRef],
   );
 
-  /** Reset nudge on all visible cards (release / hover-leave effect). */
+  /**
+   * Reset nudge on all visible cards with distance-based attenuation.
+   * @param {Object} opts - { maxOffset, maxRotation }
+   * @param {number} origin - Index of the card that was touched.
+   */
   const resetAll = useCallback(
-    (opts) => {
+    (opts, origin) => {
       const el = document.getElementById("deck");
       if (!el) return;
       el.querySelectorAll(".deck-card").forEach((img, i) => {
         if (img.style.display !== "none") {
-          nudgeDeckCard(img, i, transformsRef, opts);
+          const dist = Math.abs(origin - i);
+          const factor = Math.pow(0.4, dist);
+          nudgeDeckCard(img, i, transformsRef, {
+            maxOffset: opts.maxOffset * factor,
+            maxRotation: opts.maxRotation * factor,
+          });
         }
       });
     },
     [transformsRef],
   );
+
+  /** Resolve the deck-card index from a touch event target. */
+  const touchIndex = (e) => {
+    const card = e.target.closest(".deck-card");
+    return card ? Number(card.dataset.index) : remaining - 1;
+  };
 
   const handleTouchStart = (e) => {
     e.preventDefault(); // prevent mouse emulation
-    nudgeAll({ maxOffset: 10, maxRotation: 20 });
+    nudgeAll({ maxOffset: 10, maxRotation: 20 }, touchIndex(e));
   };
 
   const handleTouchEnd = (e) => {
     e.preventDefault();
-    resetAll({ maxOffset: 5, maxRotation: 10 });
+    resetAll({ maxOffset: 5, maxRotation: 10 }, touchIndex(e));
     onDraw();
   };
 
@@ -81,6 +107,7 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
             alt=""
             aria-hidden="true"
             className={`deck-card${isTop ? " top-card" : ""}`}
+            data-index={i}
             data-pin-nopin="true"
             data-base-transform={transformsRef.current[i]}
             style={{
@@ -90,20 +117,26 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
             }}
             onMouseEnter={
               canHover
-                ? (e) =>
+                ? (e) => {
+                    const depth = remaining - 1 - i;
+                    const factor = Math.pow(0.6, depth);
                     nudgeDeckCard(e.currentTarget, i, transformsRef, {
-                      maxOffset: isTop ? 10 : 5,
-                      maxRotation: isTop ? 20 : 10,
-                    })
+                      maxOffset: 10 * factor,
+                      maxRotation: 20 * factor,
+                    });
+                  }
                 : undefined
             }
             onMouseLeave={
               canHover
-                ? (e) =>
+                ? (e) => {
+                    const depth = remaining - 1 - i;
+                    const factor = Math.pow(0.4, depth);
                     nudgeDeckCard(e.currentTarget, i, transformsRef, {
-                      maxOffset: isTop ? 5 : 3,
-                      maxRotation: isTop ? 10 : 5,
-                    })
+                      maxOffset: 5 * factor,
+                      maxRotation: 10 * factor,
+                    });
+                  }
                 : undefined
             }
           />
