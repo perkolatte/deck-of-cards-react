@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
     />
     <title>Cards</title>
-    <link rel="stylesheet" href="/src/styles/style.css" />
+    <!-- React imports CSS from the entrypoint -->
     <link rel="icon" type="image/x-icon" href="/images/spade.png" />
     <link rel="apple-touch-icon" href="/images/spade-icon.png" />
     <meta name="pinterest" content="nopin" />
@@ -30,16 +30,7 @@
         />
       </filter>
     </svg>
-    <div id="game-container" role="main">
-      <div id="drawn-cards-container" aria-label="Drawn Cards"></div>
-      <div id="deck" aria-label="Deck of Cards">
-        <img
-          id="back-of-card"
-          src="images/back.png"
-          alt="Top of Deck, face down"
-        />
-      </div>
-    </div>
-    <script type="module" src="/src/components/main.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
