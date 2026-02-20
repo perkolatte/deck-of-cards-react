@@ -42,9 +42,12 @@ export default function DrawnCards({ drawn, onShuffle }) {
   return (
     <div
       id="drawn-cards-container"
-      aria-label="Drawn Cards"
+      role="button"
+      tabIndex={0}
+      aria-label={`Drawn pile: ${drawn.length} cards. Click to shuffle back.`}
       className={drawn.length ? "active" : ""}
       onClick={onShuffle}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onShuffle(); } }}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
     >

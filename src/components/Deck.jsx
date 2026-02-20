@@ -12,7 +12,14 @@ import backImg from "../assets/back.png";
  */
 export default function Deck({ remaining, transformsRef, onDraw }) {
   return (
-    <div id="deck" aria-label="Deck of Cards" onClick={onDraw}>
+    <div
+      id="deck"
+      role="button"
+      tabIndex={0}
+      aria-label={`Deck: ${remaining} cards remaining. Click to draw.`}
+      onClick={onDraw}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onDraw(); } }}
+    >
       {Array.from({ length: 52 }).map((_, i) => {
         const show = i < remaining;
         const isTop = i === remaining - 1;
@@ -21,7 +28,8 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
           <img
             key={i}
             src={backImg}
-            alt="Shuffle deck, face down"
+            alt=""
+            aria-hidden="true"
             className={`deck-card${isTop ? " top-card" : ""}`}
             data-pin-nopin="true"
             data-base-transform={transformsRef.current[i]}

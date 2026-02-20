@@ -99,6 +99,21 @@ body {
 }
 
 /* -----------------------------------
+   Focus Styles (Keyboard Accessibility)
+----------------------------------- */
+#deck:focus-visible,
+#drawn-cards-container:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+.controls button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* -----------------------------------
    Card Base Styles (Drawn & Deck)
 ----------------------------------- */
 .card,

@@ -126,7 +126,7 @@ export default function App() {
   }, []);
 
   return (
-    <div id="game-container" role="main">
+    <main id="game-container">
       <Controls
         remaining={remaining}
         drawnCount={drawn.length}
@@ -147,6 +147,6 @@ export default function App() {
           onDraw={handleDraw}
         />
       </div>
-    </div>
+    </main>
   );
 }

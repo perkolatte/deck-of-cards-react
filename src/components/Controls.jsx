@@ -22,28 +22,32 @@ export default function Controls({
   onSlower,
 }) {
   return (
-    <div className="controls">
-      <button
-        onClick={onDraw}
-        disabled={remaining === 0}
-        aria-disabled={remaining === 0}
-      >
+    <nav className="controls" aria-label="Game controls">
+      <button onClick={onDraw} disabled={remaining === 0}>
         Draw
       </button>
-      <button onClick={onToggleAutoDraw} disabled={!remaining && !isDrawing}>
+      <button
+        onClick={onToggleAutoDraw}
+        disabled={!remaining && !isDrawing}
+        aria-label={isDrawing ? "Stop auto draw" : "Start auto draw"}
+      >
         {isDrawing ? "Stop" : "Auto"}
       </button>
-      <button onClick={onFaster} disabled={speed <= 200}>
+      <button
+        onClick={onFaster}
+        disabled={speed <= 200}
+        aria-label={`Draw faster, current speed ${speed} milliseconds`}
+      >
         Faster
       </button>
-      <button onClick={onSlower} disabled={speed >= 3000}>
+      <button
+        onClick={onSlower}
+        disabled={speed >= 3000}
+        aria-label={`Draw slower, current speed ${speed} milliseconds`}
+      >
         Slower
       </button>
-      <button
-        onClick={onShuffle}
-        disabled={drawnCount === 0}
-        aria-disabled={drawnCount === 0}
-      >
+      <button onClick={onShuffle} disabled={drawnCount === 0}>
         Shuffle
       </button>
       <div className="remaining" aria-live="polite">
@@ -54,6 +58,6 @@ export default function Controls({
           {error}
         </div>
       )}
-    </div>
+    </nav>
   );
 }
