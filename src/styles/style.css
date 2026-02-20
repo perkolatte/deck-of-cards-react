@@ -134,6 +134,10 @@ body {
   transform: var(--base-transform, translate(-50%, -50%));
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  pointer-events: auto;
 }
 
 .card {
