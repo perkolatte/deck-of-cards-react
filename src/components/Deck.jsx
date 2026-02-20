@@ -1,6 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { nudgeDeckCard } from "../utils/transforms";
 import backImg from "../assets/back.png";
+
+/** True when the primary input supports hover (not a touchscreen). */
+const canHover = window.matchMedia("(hover: hover)").matches;
 
 /**
  * Visual deck of 52 face-down card images.
@@ -85,17 +88,23 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
               zIndex: i + 1,
               "--base-transform": transformsRef.current[i],
             }}
-            onMouseEnter={(e) =>
-              nudgeDeckCard(e.currentTarget, i, transformsRef, {
-                maxOffset: isTop ? 10 : 5,
-                maxRotation: isTop ? 20 : 10,
-              })
+            onMouseEnter={
+              canHover
+                ? (e) =>
+                    nudgeDeckCard(e.currentTarget, i, transformsRef, {
+                      maxOffset: isTop ? 10 : 5,
+                      maxRotation: isTop ? 20 : 10,
+                    })
+                : undefined
             }
-            onMouseLeave={(e) =>
-              nudgeDeckCard(e.currentTarget, i, transformsRef, {
-                maxOffset: isTop ? 5 : 3,
-                maxRotation: isTop ? 10 : 5,
-              })
+            onMouseLeave={
+              canHover
+                ? (e) =>
+                    nudgeDeckCard(e.currentTarget, i, transformsRef, {
+                      maxOffset: isTop ? 5 : 3,
+                      maxRotation: isTop ? 10 : 5,
+                    })
+                : undefined
             }
           />
         );
