@@ -1,6 +1,14 @@
 import React from "react";
 import { nudgeDeckCard } from "../utils/transforms";
 
+/**
+ * Visual deck of 52 face-down card images.
+ * Hover applies a random nudge via the --base-transform CSS variable.
+ * @param {Object} props
+ * @param {number} props.remaining - Cards left in the deck.
+ * @param {React.MutableRefObject<string[]>} props.transformsRef - Mutable ref holding per-card transforms.
+ * @param {Function} props.onDraw - Callback fired when the deck is clicked.
+ */
 export default function Deck({ remaining, transformsRef, onDraw }) {
   return (
     <div id="deck" aria-label="Deck of Cards" onClick={onDraw}>

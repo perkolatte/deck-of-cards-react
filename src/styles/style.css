@@ -23,7 +23,9 @@
   margin-left: auto;
 }
 
-/* Disable page scrolling and account for safe areas on mobile */
+/* -----------------------------------
+   Viewport & Safe Areas
+----------------------------------- */
 html,
 body {
   overflow: hidden;
@@ -34,7 +36,11 @@ body {
   padding-left: env(safe-area-inset-left);
 }
 
-/* Always vertical in portrait */
+/* -----------------------------------
+   Orientation Overrides
+----------------------------------- */
+
+/* Portrait: force vertical layout */
 @media (orientation: portrait) {
   #game-container {
     align-items: center !important;
@@ -43,25 +49,25 @@ body {
   }
 }
 
-/* Always horizontal in landscape */
+/* Landscape: force horizontal layout */
 @media (orientation: landscape) {
   #game-container {
-    display: flex; /* Ensure flexbox is applied */
+    display: flex;
     align-items: center;
-    flex-direction: row !important; /* Force horizontal layout */
+    flex-direction: row !important;
     justify-content: space-around;
-    gap: 24px; /* Adjust gap for better spacing */
+    gap: 24px;
   }
 
   #drawn-cards-container,
   #deck {
-    width: clamp(140px, 30dvh, 200px); /* Scale by height for landscape */
-    height: clamp(100px, 25dvh, 150px); /* Adjust height for landscape */
+    width: clamp(140px, 30dvh, 200px);
+    height: clamp(100px, 25dvh, 150px);
   }
 
   .card,
   .deck-card {
-    width: 100%; /* Ensure cards fit within the container */
+    width: 100%;
   }
 }
 
@@ -69,7 +75,6 @@ body {
    Body Background
 ----------------------------------- */
 body {
-  /* Make sure your background fills under the bars */
   padding-top: env(safe-area-inset-top);
   padding-right: env(safe-area-inset-right);
   padding-bottom: env(safe-area-inset-bottom);
@@ -89,8 +94,9 @@ body {
   width: 100%;
   height: 100dvh;
   padding: 20px;
-  /* Add extra bottom padding to avoid the address bar and dynamic island */
-  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  padding-bottom: calc(
+    20px + env(safe-area-inset-bottom)
+  ); /* clear dynamic island / nav bar */
   gap: 20px;
 }
 
@@ -106,7 +112,7 @@ body {
   height: clamp(160px, 30dvh, 400px);
 }
 
-/* Replace the combined hover rule with separate rules so only the drawn stack scales */
+/* Only the drawn stack scales on hover */
 #drawn-cards-container:hover {
   transition: transform 0.2s ease-in-out;
   transform: scale(1.05);
@@ -126,13 +132,12 @@ body {
   cursor: pointer;
   transition:
     transform 0.4s cubic-bezier(0.32, 1, 0.23, 1),
-    box-shadow 0.2s ease; /* Smooth animations */
-  /* Respect the CSS variable if present, otherwise fall back to centered translate */
+    box-shadow 0.2s ease;
   transform: var(--base-transform, translate(-50%, -50%));
 }
 
 .card:hover {
-  transform: translate(-50%, -50%) scale(1.05); /* Add scaling on hover */
+  transform: translate(-50%, -50%) scale(1.05);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
@@ -151,44 +156,47 @@ body {
     transform 0.2s,
     box-shadow 0.2s,
     opacity 0.2s;
-  /* Use a CSS variable for the base transform so hover scale can be applied in CSS */
-  transform: var(--base-transform, translate(-50%, -50%));
+  transform: var(
+    --base-transform,
+    translate(-50%, -50%)
+  ); /* CSS variable lets hover compose with JS transforms */
   transform-origin: center center;
 }
 
-/* Only the top deck card should scale on hover; this composes with the base transform */
+/* Top deck card scales on hover, composing with the JS-managed base transform */
 .deck-card.top-card:hover {
   transform: var(--base-transform, translate(-50%, -50%)) scale(1.1) !important;
 }
 
-/* Force card images to maintain aspect ratio */
+/* -----------------------------------
+   Shared Card Overrides
+----------------------------------- */
+
+/* Aspect ratio */
 .card,
 .deck-card {
   display: block;
-  width: 100%; /* Use full container width */
-  max-width: 100%; /* Do not exceed container width */
-  height: auto; /* Let the height adjust automatically */
-  /* Ensure CSS variable is respected if present */
+  width: 100%;
+  max-width: 100%;
+  height: auto;
   transform: var(--base-transform, translate(-50%, -50%));
-  object-fit: contain; /* Preserve natural aspect ratio */
+  object-fit: contain;
 }
 
-/* Update card styles to round edges */
+/* Rounded edges */
 .card,
 .deck-card {
-  border-radius: 8px; /* Adjust value as needed */
+  border-radius: 8px;
 }
 
-/* Remove box-shadow from card elements and apply a drop-shadow filter */
+/* Drop shadow (replaces box-shadow) */
 .card,
 .deck-card {
-  /* Remove any box-shadow */
   box-shadow: none;
-  /* Apply the base drop shadow */
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
-/* On hover, both card types use the same enhanced drop-shadow */
+/* Enhanced shadow on hover */
 .card:hover {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
@@ -199,11 +207,11 @@ body {
 
 /* Default: small portrait (S) */
 #game-container {
-  display: flex; /* ensure flex if not inherited */
+  display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: space-evenly;
-  height: 100dvh; /* full viewport height */
+  height: 100dvh;
   padding: 16px;
   gap: 16px;
 }
@@ -217,21 +225,21 @@ body {
 @media (orientation: landscape) and (max-width: 599px) {
   #game-container {
     align-items: center;
-    flex-direction: row; /* Ensure horizontal layout */
+    flex-direction: row;
     justify-content: space-around;
-    padding: 12px; /* Reduce padding for small landscape */
-    gap: 16px; /* Adjust gap for smaller screens */
+    padding: 12px;
+    gap: 16px;
   }
 
   #drawn-cards-container,
   #deck {
-    width: clamp(100px, 25dvh, 160px); /* Scale by height for small landscape */
-    height: clamp(225px, 20dvh, 120px); /* Adjust height for landscape */
+    width: clamp(100px, 25dvh, 160px);
+    height: clamp(225px, 20dvh, 120px);
   }
 
   .card,
   .deck-card {
-    width: 100%; /* Ensure cards fit within the container */
+    width: 100%;
   }
 }
 
@@ -247,53 +255,48 @@ body {
     height: 268px;
   }
 }
-u-8
 
 /* Tablet landscape & small desktop (M-land) */
 @media (min-width: 600px) and (orientation: landscape) {
   #game-container {
     align-items: center;
-    flex-direction: row; /* Ensure horizontal layout */
+    flex-direction: row;
     justify-content: space-around;
-    padding: 24px; /* Increase padding for medium landscape */
-    gap: 24px; /* Adjust gap for medium screens */
+    padding: 24px;
+    gap: 24px;
   }
 
   #drawn-cards-container,
   #deck {
-    width: clamp(
-      168px,
-      30dvh,
-      200px
-    ); /* Scale by height for medium landscape */
-    height: clamp(225px, 25dvh, 150px); /* Adjust height for medium landscape */
+    width: clamp(168px, 30dvh, 200px);
+    height: clamp(225px, 25dvh, 150px);
   }
 
   .card,
   .deck-card {
-    width: 100%; /* Ensure cards fit within the container */
+    width: 100%;
   }
 }
 
-/* Large desktop (L) */
+/* Large desktop landscape (L-land) */
 @media (min-width: 900px) and (orientation: landscape) {
   #game-container {
     align-items: center;
-    flex-direction: row; /* Ensure horizontal layout */
+    flex-direction: row;
     justify-content: space-around;
-    padding: 32px; /* Increase padding for large landscape */
-    gap: 32px; /* Adjust gap for large screens */
+    padding: 32px;
+    gap: 32px;
   }
 
   #drawn-cards-container,
   #deck {
-    width: 240px; /* Fixed width for large screens */
-    height: 320px; /* Fixed height for large screens */
+    width: 240px;
+    height: 320px;
   }
 
   .card,
   .deck-card {
-    width: 100%; /* Ensure cards fit within the container */
+    width: 100%;
   }
 }
 
@@ -311,22 +314,24 @@ u-8
   }
 }
 
-/* Increase card size for small screens (e.g., iPhones) */
+/* Small screens (e.g. iPhones) */
 @media (max-width: 375px) {
   #drawn-cards-container,
   #deck {
-    width: clamp(75px, 50dvw, 150); /* Increase width for small screens */
-    height: clamp(100px, 50vh, 200px); /* Increase height for small screens */
+    width: clamp(75px, 50dvw, 150);
+    height: clamp(100px, 50vh, 200px);
   }
 
   .card,
   .deck-card {
-    max-width: 100%; /* Ensure cards fit within the container */
-    max-height: 100%; /* Ensure cards maintain aspect ratio */
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 
-/* Increase transition duration and use a custom cubic-bezier for inertia and friction effect */
+/* -----------------------------------
+   Card Transitions
+----------------------------------- */
 .card,
 .deck-card {
   transition:
@@ -334,7 +339,9 @@ u-8
     box-shadow 0.2s ease;
 }
 
-/* Shared styles for all cards */
+/* -----------------------------------
+   Shared Card Base Styles
+----------------------------------- */
 .card,
 .deck-card {
   position: absolute;
@@ -345,28 +352,30 @@ u-8
   max-width: clamp(120px, 60ddvw, 300px);
   height: auto;
   max-height: 100%;
-  border-radius: 8px; /* Rounded edges */
+  border-radius: 8px;
   box-shadow: none;
   transition:
     transform 0.4s cubic-bezier(0.32, 1, 0.1, 1),
     box-shadow 0.2s ease;
   transform: var(--base-transform, translate(-50%, -50%));
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-  object-fit: contain; /* Preserve aspect ratio */
+  object-fit: contain;
 }
 
-/* Hover effects for drawn cards */
+/* Drawn card hover */
 .card:hover {
   transform: translate(-50%, -50%) scale(1.05);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
-/* Hover effects for the top card in the deck (compose with JS-updated base transform) */
+/* Top deck card hover (compose with JS base transform) */
 .deck-card.top-card:hover {
   transform: var(--base-transform, translate(-50%, -50%)) scale(1.1) !important;
 }
 
-/* Responsive scaling for game container */
+/* -----------------------------------
+   Game Container (final overrides)
+----------------------------------- */
 #game-container {
   display: flex;
   align-items: center;

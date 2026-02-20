@@ -1,5 +1,7 @@
 /**
  * Generate an array of n random CSS transform strings for card positioning.
+ * @param {number} n - Number of transforms to generate.
+ * @returns {string[]} Array of CSS transform strings.
  */
 export function generateBaseTransforms(n) {
   return Array.from({ length: n }, () => {
@@ -12,6 +14,10 @@ export function generateBaseTransforms(n) {
 
 /**
  * Generate a random offset/rotation object for hover effects.
+ * @param {Object} [options] - Optional bounds.
+ * @param {number} [options.maxOffset=10] - Maximum pixel offset in each axis.
+ * @param {number} [options.maxRotation=10] - Maximum rotation in degrees.
+ * @returns {{offsetX: number, offsetY: number, rotation: number}} Random transform values.
  */
 export function randomTransform({ maxOffset = 10, maxRotation = 10 } = {}) {
   return {
@@ -23,6 +29,7 @@ export function randomTransform({ maxOffset = 10, maxRotation = 10 } = {}) {
 
 /**
  * Build a random drawn-card inline style (position + rotation).
+ * @returns {{transform: string}} Style object for a drawn card.
  */
 export function drawnCardStyle() {
   return {
@@ -34,7 +41,12 @@ export function drawnCardStyle() {
 }
 
 /**
- * Append a random offset/rotation to a base transform string and return the result.
+ * Append a random offset/rotation to a base transform string.
+ * @param {string} base - Starting CSS transform string.
+ * @param {Object} [options] - Optional bounds forwarded to randomTransform.
+ * @param {number} [options.maxOffset=5] - Maximum pixel offset.
+ * @param {number} [options.maxRotation=10] - Maximum rotation in degrees.
+ * @returns {string} Combined CSS transform string.
  */
 export function nudgeTransform(base, { maxOffset = 5, maxRotation = 10 } = {}) {
   const { offsetX, offsetY, rotation } = randomTransform({
@@ -45,8 +57,10 @@ export function nudgeTransform(base, { maxOffset = 5, maxRotation = 10 } = {}) {
 }
 
 /**
- * Apply a random nudge to an element's inline transform (for drawn cards).
- * Reads the current transform from either data-base-transform, inline style, or a default.
+ * Apply a random nudge to an element's inline transform.
+ * Reads the current base from data-base-transform, inline style, or a default.
+ * @param {HTMLElement} element - DOM element to nudge.
+ * @param {Object} [opts] - Options forwarded to nudgeTransform.
  */
 export function nudgeElement(element, opts = {}) {
   const base =
@@ -61,6 +75,10 @@ export function nudgeElement(element, opts = {}) {
 /**
  * Apply a random nudge to a deck card's --base-transform CSS variable
  * and persist the new value in a transforms ref array.
+ * @param {HTMLElement} element - The deck card DOM element.
+ * @param {number} index - Card index in the transforms array.
+ * @param {React.MutableRefObject<string[]>} transformsRef - Mutable ref holding per-card transforms.
+ * @param {Object} [opts] - Options forwarded to nudgeTransform.
  */
 export function nudgeDeckCard(element, index, transformsRef, opts = {}) {
   const prev = transformsRef.current[index] || "translate(-50%, -50%)";

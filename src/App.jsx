@@ -5,12 +5,17 @@ import Controls from "./components/Controls";
 import Deck from "./components/Deck";
 import DrawnCards from "./components/DrawnCards";
 
+/**
+ * Root application component.
+ * Manages deck state and orchestrates Controls, DrawnCards, and Deck.
+ */
 export default function App() {
   const [deckId, setDeckId] = useState(null);
   const [remaining, setRemaining] = useState(52);
   const [drawn, setDrawn] = useState([]);
   const transformsRef = useRef(generateBaseTransforms(52));
 
+  /** Create a new shuffled deck on mount. */
   useEffect(() => {
     let mounted = true;
     createDeck().then((data) => {
@@ -23,6 +28,7 @@ export default function App() {
     };
   }, []);
 
+  /** Draw one card from the deck and add it to the drawn pile. */
   const handleDraw = async () => {
     if (!deckId || remaining === 0) return;
     try {
@@ -35,6 +41,7 @@ export default function App() {
     }
   };
 
+  /** Shuffle all cards back into the deck and reset state. */
   const handleShuffle = async () => {
     if (!deckId) return;
     try {
