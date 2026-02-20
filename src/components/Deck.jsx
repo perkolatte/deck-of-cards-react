@@ -1,16 +1,56 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { nudgeDeckCard } from "../utils/transforms";
 import backImg from "../assets/back.png";
 
 /**
  * Visual deck of 52 face-down card images.
- * Hover applies a random nudge via the --base-transform CSS variable.
+ * Desktop: hover nudges cards, click draws.
+ * Mobile: press nudges cards, release draws.
  * @param {Object} props
  * @param {number} props.remaining - Cards left in the deck.
  * @param {React.MutableRefObject<string[]>} props.transformsRef - Mutable ref holding per-card transforms.
- * @param {Function} props.onDraw - Callback fired when the deck is clicked.
+ * @param {Function} props.onDraw - Callback fired when the deck is clicked/tapped.
  */
 export default function Deck({ remaining, transformsRef, onDraw }) {
+  /** Nudge all visible cards (press / hover-enter effect). */
+  const nudgeAll = useCallback(
+    (opts) => {
+      const el = document.getElementById("deck");
+      if (!el) return;
+      el.querySelectorAll(".deck-card").forEach((img, i) => {
+        if (img.style.display !== "none") {
+          nudgeDeckCard(img, i, transformsRef, opts);
+        }
+      });
+    },
+    [transformsRef],
+  );
+
+  /** Reset nudge on all visible cards (release / hover-leave effect). */
+  const resetAll = useCallback(
+    (opts) => {
+      const el = document.getElementById("deck");
+      if (!el) return;
+      el.querySelectorAll(".deck-card").forEach((img, i) => {
+        if (img.style.display !== "none") {
+          nudgeDeckCard(img, i, transformsRef, opts);
+        }
+      });
+    },
+    [transformsRef],
+  );
+
+  const handleTouchStart = (e) => {
+    e.preventDefault(); // prevent mouse emulation
+    nudgeAll({ maxOffset: 10, maxRotation: 20 });
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    resetAll({ maxOffset: 5, maxRotation: 10 });
+    onDraw();
+  };
+
   return (
     <div
       id="deck"
@@ -18,6 +58,8 @@ export default function Deck({ remaining, transformsRef, onDraw }) {
       tabIndex={0}
       aria-label={`Deck: ${remaining} cards remaining. Click to draw.`}
       onClick={onDraw}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();

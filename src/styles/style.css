@@ -93,9 +93,11 @@ body {
   width: clamp(120px, 35vw, 240px);
 }
 
-#drawn-cards-container:hover {
-  transition: transform 0.2s ease-in-out;
-  transform: scale(1.05);
+@media (hover: hover) {
+  #drawn-cards-container:hover {
+    transition: transform 0.2s ease-in-out;
+    transform: scale(1.05);
+  }
 }
 
 /* -----------------------------------
@@ -145,15 +147,17 @@ body {
 }
 
 /* -----------------------------------
-   Card Hover States
+   Card Hover States (pointer devices only)
 ----------------------------------- */
-.card:hover {
-  transform: translate(-50%, -50%) scale(1.05);
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-}
+@media (hover: hover) {
+  .card:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  }
 
-.deck-card.top-card:hover {
-  transform: var(--base-transform, translate(-50%, -50%)) scale(1.1) !important;
+  .deck-card.top-card:hover {
+    transform: var(--base-transform, translate(-50%, -50%)) scale(1.1) !important;
+  }
 }
 
 /* -----------------------------------

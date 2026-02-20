@@ -39,6 +39,21 @@ export default function DrawnCards({ drawn, onShuffle }) {
     nudgeAllCards(e.currentTarget, { maxOffset: 3, maxRotation: 5 });
   };
 
+  /** Press: scale up + nudge. */
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    e.currentTarget.style.transform = "scale(1.1)";
+    nudgeAllCards(e.currentTarget, { maxOffset: 5, maxRotation: 10 });
+  };
+
+  /** Release: reset + shuffle. */
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    e.currentTarget.style.transform = "";
+    nudgeAllCards(e.currentTarget, { maxOffset: 3, maxRotation: 5 });
+    onShuffle();
+  };
+
   return (
     <div
       id="drawn-cards-container"
@@ -47,6 +62,8 @@ export default function DrawnCards({ drawn, onShuffle }) {
       aria-label={`Drawn pile: ${drawn.length} cards. Click to shuffle back.`}
       className={drawn.length ? "active" : ""}
       onClick={onShuffle}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
