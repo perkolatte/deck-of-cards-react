@@ -13,11 +13,11 @@
    Controls Bar
 ----------------------------------- */
 .controls {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
   align-items: center;
   margin-bottom: 12px;
+  gap: 8px;
 }
 
 .controls .remaining {
@@ -25,10 +25,13 @@
 }
 
 .controls .error-message {
-  width: 100%;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
   color: #ff6b6b;
-  font-weight: bold;
   text-align: center;
+  font-weight: bold;
 }
 
 /* -----------------------------------

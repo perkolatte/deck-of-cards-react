@@ -9,7 +9,18 @@ import React from "react";
  * @param {Function} props.onShuffle - Callback for the Shuffle button.
  * @param {string|null} props.error - Error message to display, or null.
  */
-export default function Controls({ remaining, drawnCount, onDraw, onShuffle, error }) {
+export default function Controls({
+  remaining,
+  drawnCount,
+  onDraw,
+  onShuffle,
+  error,
+  isDrawing,
+  onToggleAutoDraw,
+  speed,
+  onFaster,
+  onSlower,
+}) {
   return (
     <div className="controls">
       <button
@@ -18,6 +29,15 @@ export default function Controls({ remaining, drawnCount, onDraw, onShuffle, err
         aria-disabled={remaining === 0}
       >
         Draw
+      </button>
+      <button onClick={onToggleAutoDraw} disabled={!remaining && !isDrawing}>
+        {isDrawing ? "Stop drawing" : "Start Auto Draw"}
+      </button>
+      <button onClick={onFaster} disabled={speed <= 200}>
+        Faster
+      </button>
+      <button onClick={onSlower} disabled={speed >= 3000}>
+        Slower
       </button>
       <button
         onClick={onShuffle}

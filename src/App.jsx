@@ -15,6 +15,31 @@ export default function App() {
   const [drawn, setDrawn] = useState([]);
   const [error, setError] = useState(null);
   const transformsRef = useRef(generateBaseTransforms(52));
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [speed, setSpeed] = useState(1000);
+  const timerRef = useRef(null);
+  const drawRef = useRef(null);
+  const NO_CARDS_ERROR = "No cards remaining!";
+
+  /** Keep drawRef current so the interval always calls the latest logic. */
+  drawRef.current = async () => {
+    try {
+      const res = await drawFromDeck(deckId, 1);
+      if (res.remaining === 0) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        setIsDrawing(false);
+        setError(NO_CARDS_ERROR);
+      }
+      setRemaining(res.remaining);
+      const card = { ...res.cards[0], style: drawnCardStyle() };
+      setDrawn((prev) => [...prev, card]);
+    } catch {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setIsDrawing(false);
+    }
+  };
 
   /** Create a new shuffled deck on mount. */
   useEffect(() => {
@@ -33,7 +58,7 @@ export default function App() {
   const handleDraw = async () => {
     if (!deckId) return;
     if (remaining === 0) {
-      setError("Error: no cards remaining!");
+      setError(NO_CARDS_ERROR);
       return;
     }
     setError(null);
@@ -61,6 +86,45 @@ export default function App() {
     }
   };
 
+  /** Start or stop auto-drawing one card per interval. */
+  const toggleAutoDraw = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setIsDrawing(false);
+    } else {
+      setIsDrawing(true);
+      timerRef.current = setInterval(() => drawRef.current(), speed);
+    }
+  };
+
+  /** Helper to restart the interval at a new speed. */
+  const startInterval = (ms) => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => drawRef.current(), ms);
+  };
+
+  /** Decrease interval (draw faster), minimum 200ms. */
+  const handleFaster = () => {
+    const next = Math.max(200, speed - 200);
+    setSpeed(next);
+    if (isDrawing) startInterval(next);
+  };
+
+  /** Increase interval (draw slower), maximum 3000ms. */
+  const handleSlower = () => {
+    const next = Math.min(3000, speed + 200);
+    setSpeed(next);
+    if (isDrawing) startInterval(next);
+  };
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
   return (
     <div id="game-container" role="main">
       <Controls
@@ -68,6 +132,11 @@ export default function App() {
         drawnCount={drawn.length}
         onDraw={handleDraw}
         onShuffle={handleShuffle}
+        onToggleAutoDraw={toggleAutoDraw}
+        isDrawing={isDrawing}
+        speed={speed}
+        onFaster={handleFaster}
+        onSlower={handleSlower}
         error={error}
       />
       <DrawnCards drawn={drawn} onShuffle={handleShuffle} />
